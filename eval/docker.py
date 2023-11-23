@@ -81,6 +81,7 @@ async def container_exited(name: str) -> bool:
     command = f'docker inspect --format="{{{{.State.Running}}}}" {name}'
     proc = await asyncio.create_subprocess_exec(*command.split(), stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
     stdout, _ = await proc.communicate()
+    logging.info(f'[eval.docker container_exited]\t{name=} {stdout=}')
     return stdout.decode().strip() == 'false'
 
 

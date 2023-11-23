@@ -33,7 +33,7 @@ async def run(message: Message, command: str, name: str, image: str) -> Message:
     logging.info(f'[func.runner run]\t{chat_id=} {name=} {image=} {command=}')
 
     inform, _ = await asyncio.gather(
-        message.reply_text(RUNNING, quote=False),
+        message.reply_text(CREATING, quote=False),
         run_docker(
             name=name,
             image=image,
@@ -46,6 +46,7 @@ async def run(message: Message, command: str, name: str, image: str) -> Message:
         )
     )
     t0 = time.time()
+    creation_informed = False
 
     while time.time() - t0 < limits['timeout']:
         if await container_exited(name):
@@ -58,13 +59,21 @@ async def run(message: Message, command: str, name: str, image: str) -> Message:
             )
             clean_files(name)
             return inform
+        else:
+            if not creation_informed and time.time() - t0 > 5:
+                creation_informed = True
+                logging.info(f'[func.runner run]\t{chat_id=} {name=} creation_informed')
+                await inform.edit_text(RUNNING, parse_mode=ParseMode.MARKDOWN)
+
         await asyncio.sleep(1)
 
     # timeout
     logging.info(f'[func.runner run]\t{chat_id=} {name=} timeout')
-    _, _, _ = read_output_files(name)
+    output, error, statistic = read_output_files(name)
+    result_text = gen_result(output, error, statistic)
+
     inform, _ = await asyncio.gather(
-        inform.edit_text(TIMEOUT),
+        inform.edit_text(f'{TIMEOUT}\n{result_text}', parse_mode=ParseMode.MARKDOWN),
         clean_container(name)
     )
     clean_files(name)
