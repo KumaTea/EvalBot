@@ -1,13 +1,10 @@
 import time
 import asyncio
+import logging
 from common.data import *
-from eval.docker import *
-from pyrogram import Client
-from typing import Optional
+from eval.docker import run_docker, container_exited, clean_container, read_output_files, clean_files
 from pyrogram.types import Message
 from pyrogram.enums.parse_mode import ParseMode
-from eval.lang.python import create_bash_script
-from bot.tools import get_command_content, gen_uuid
 
 
 def gen_result(output, error, statistic):
@@ -33,8 +30,9 @@ async def run(message: Message, command: str, name: str, image: str) -> Message:
         limits = TRUSTED_LIMITS
     else:
         limits = DOCKER_LIMITS
+    logging.info(f'[func.runner run]\t{chat_id=} {name=} {image=} {command=}')
 
-    inform, _ = asyncio.gather(
+    inform, _ = await asyncio.gather(
         message.reply_text(RUNNING, quote=False),
         run_docker(
             name=name,
@@ -51,19 +49,23 @@ async def run(message: Message, command: str, name: str, image: str) -> Message:
 
     while time.time() - t0 < limits['timeout']:
         if await container_exited(name):
-            output, error, statistic = read_del_output_files(name)
+            logging.info(f'[func.runner run]\t{chat_id=} {name=} exited')
+            output, error, statistic = read_output_files(name)
             result_text = gen_result(output, error, statistic)
             inform, _ = await asyncio.gather(
                 inform.edit_text(result_text, parse_mode=ParseMode.MARKDOWN),
                 clean_container(name)
             )
+            clean_files(name)
             return inform
         await asyncio.sleep(1)
 
     # timeout
-    _, _, _ = read_del_output_files(name)
+    logging.info(f'[func.runner run]\t{chat_id=} {name=} timeout')
+    _, _, _ = read_output_files(name)
     inform, _ = await asyncio.gather(
         inform.edit_text(TIMEOUT),
         clean_container(name)
     )
+    clean_files(name)
     return inform

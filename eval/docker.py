@@ -1,29 +1,31 @@
-import os
 import asyncio
+import logging
 from common.data import *
-from typing import Optional
 
 
 def get_output_files(name: str) -> tuple[str, str, str]:
     return f'{SHM}/{name}-out.txt', f'{SHM}/{name}-err.txt', f'{SHM}/{name}-stat.txt'
 
 
-def read_del_output_files(name: str):
+def read_output_files(name: str):
     out, err, stat = get_output_files(name)
 
     if os.path.exists(out):
         with open(out, 'r', encoding='utf-8') as f:
             output = f.read()
-        os.remove(out)
     if os.path.exists(err):
         with open(err, 'r', encoding='utf-8') as f:
             error = f.read()
-        os.remove(err)
     if os.path.exists(stat):
         with open(stat, 'r', encoding='utf-8') as f:
             statistic = f.read()
-        os.remove(stat)
     return output, error, statistic
+
+
+def clean_files(name: str) -> None:
+    files = [f for f in os.listdir(SHM) if f.startswith(name)]
+    for f in files:
+        os.remove(f'{SHM}/{f}')
 
 
 async def run_docker(
@@ -71,6 +73,7 @@ async def run_docker(
     # not subprocess.run(command)
     # run in background, don't wait
     # subprocess.Popen(command)
+    logging.info(f'[eval.docker run_docker]\t{name=} {command=}')
     await asyncio.create_subprocess_exec(*command, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
 
 
@@ -84,6 +87,6 @@ async def container_exited(name: str) -> bool:
 async def clean_container(name: str) -> None:
     stop_command = f'docker stop {name}'
     rm_command = f'docker rm {name}'
-
+    logging.info(f'[eval.docker clean_container]\t{name=} {stop_command=} {rm_command=}')
     await asyncio.create_subprocess_exec(*stop_command.split(), stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
     await asyncio.create_subprocess_exec(*rm_command.split(), stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
