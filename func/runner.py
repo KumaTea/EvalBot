@@ -2,9 +2,9 @@ import time
 import asyncio
 import logging
 from common.data import *
-from eval.docker import run_docker, container_exited, clean_container, read_output_files, clean_files
 from pyrogram.types import Message
 from pyrogram.enums.parse_mode import ParseMode
+from eval.docker import run_docker, container_exited, clean_container, read_output_files, clean_files
 
 
 def gen_result(output, error, statistic):
@@ -26,11 +26,9 @@ def gen_result(output, error, statistic):
 
 async def run(message: Message, command: str, name: str, image: str) -> Message:
     chat_id = message.chat.id
-    if chat_id in trusted_group:
-        limits = TRUSTED_LIMITS
-    else:
-        limits = DOCKER_LIMITS
-    logging.info(f'[func.runner run]\t{chat_id=} {name=} {image=} {command=}')
+    trusted = chat_id in trusted_group
+    limits = TRUSTED_LIMITS if trusted else DOCKER_LIMITS
+    logging.info(f'[func.runner run]\t{chat_id=} {trusted=} {name=} {image=} {command=}')
 
     inform, _ = await asyncio.gather(
         message.reply_text(CREATING, quote=False),
@@ -49,7 +47,7 @@ async def run(message: Message, command: str, name: str, image: str) -> Message:
     creation_informed = False
 
     while time.time() - t0 < limits['timeout']:
-        if await container_exited(name):
+        if container_exited(name):
             logging.info(f'[func.runner run]\t{chat_id=} {name=} exited')
             output, error, statistic = read_output_files(name)
             result_text = gen_result(output, error, statistic)

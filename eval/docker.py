@@ -1,14 +1,20 @@
+import os
 import asyncio
 import logging
 from common.data import *
 
 
-def get_output_files(name: str) -> tuple[str, str, str]:
-    return f'{SHM}/{name}-out.txt', f'{SHM}/{name}-err.txt', f'{SHM}/{name}-stat.txt'
+def get_output_files(name: str) -> tuple[str, str, str, str]:
+    return (
+        f'{SHM}/{name}-out.txt',
+        f'{SHM}/{name}-err.txt',
+        f'{SHM}/{name}-stat.txt',
+        f'{SHM}/{name}-exit.txt'
+    )
 
 
 def read_output_files(name: str):
-    out, err, stat = get_output_files(name)
+    out, err, stat, _ = get_output_files(name)
 
     if os.path.exists(out):
         with open(out, 'r', encoding='utf-8') as f:
@@ -77,12 +83,8 @@ async def run_docker(
     await asyncio.create_subprocess_exec(*command, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
 
 
-async def container_exited(name: str) -> bool:
-    command = f'docker inspect --format="{{{{.State.Running}}}}" {name}'
-    proc = await asyncio.create_subprocess_exec(*command.split(), stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
-    stdout, _ = await proc.communicate()
-    logging.info(f'[eval.docker container_exited]\t{name=} {stdout=}')
-    return stdout.decode().strip() == 'false'
+def container_exited(name: str) -> bool:
+    return os.path.exists(f'{SHM}/{name}-exit.txt')
 
 
 async def clean_container(name: str) -> None:
