@@ -8,8 +8,12 @@ from pyrogram.handlers import MessageHandler, CallbackQueryHandler
 
 def register_handlers():
     # group commands
+    # langs
     eval_bot.add_handler(MessageHandler(command_python, filters.command(['py', 'python', 'python3']) & filters.group))
     eval_bot.add_handler(MessageHandler(command_bash, filters.command(['sh', 'bash']) & filters.group))
+
+    # others
+    eval_bot.add_handler(MessageHandler(show_limit, filters.command(['limit']) & filters.group))
 
     # callbacks
     # eval_bot.add_handler(CallbackQueryHandler(process_callback))
