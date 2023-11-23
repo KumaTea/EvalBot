@@ -14,16 +14,16 @@ def gen_result(output, error, statistic, code_file=None):
             result_text += f'```log\n{output}\n```\n'
         else:
             result_text += f'`{output}`\n'
-    else:
-        result_text += '(no output)\n'
     if error:
         result_text += '\nError:\n'
         if code_file:
-            error.replace(code_file, '<code>')
+            error = error.replace(code_file, '<code>')
         if len(error.split()) > 3:
             result_text += f'```log\n{error}\n```\n'
         else:
             result_text += f'`{error}`\n'
+    if not result_text:
+        result_text = '(no output)'
     # fix stat later
     return result_text
 
@@ -57,11 +57,13 @@ async def run(
     creation_informed = False
 
     while time.time() - t0 < limits['timeout']:
+        await asyncio.sleep(1)
+
         if container_exited(name):
             logging.info(f'[func.runner run]\t{chat_id=} {name=} exited')
             output, error, statistic = read_output_files(name)
             result_text = gen_result(output, error, statistic, code_file)
-            logging.info(f'[func.runner run]\t{chat_id=} {name=} {result_text=}')
+            # logging.info(f'[func.runner run]\t{chat_id=} {name=} {result_text=}')
             inform, _ = await asyncio.gather(
                 inform.edit_text(result_text, parse_mode=ParseMode.MARKDOWN),
                 clean_container(name)
@@ -74,13 +76,11 @@ async def run(
                 logging.info(f'[func.runner run]\t{chat_id=} {name=} creation_informed')
                 await inform.edit_text(RUNNING, parse_mode=ParseMode.MARKDOWN)
 
-        await asyncio.sleep(1)
-
     # timeout
     logging.info(f'[func.runner run]\t{chat_id=} {name=} timeout')
     output, error, statistic = read_output_files(name)
     result_text = gen_result(output, error, statistic, code_file)
-    logging.info(f'[func.runner run]\t{chat_id=} {name=} {result_text=}')
+    # logging.info(f'[func.runner run]\t{chat_id=} {name=} {result_text=}')
     inform, _ = await asyncio.gather(
         inform.edit_text(f'{TIMEOUT}\n{result_text}', parse_mode=ParseMode.MARKDOWN),
         clean_container(name)

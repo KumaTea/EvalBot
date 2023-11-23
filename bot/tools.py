@@ -13,8 +13,9 @@ def get_command_content(message: Message) -> Optional[str]:
     if not text:
         return None
 
-    if ' ' in text:
-        cmd, text = text.split(' ', 1)
+    command_entity = message.entities[0]
+    if len(text) > command_entity.length:
+        text = text[command_entity.length+1:]
         return text
 
     reply = message.reply_to_message

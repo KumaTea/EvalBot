@@ -1,3 +1,4 @@
+import logging
 from common.data import *
 from pyrogram import Client
 from typing import Optional
@@ -11,6 +12,7 @@ from bot.tools import get_command_content, gen_uuid
 async def run_python(code: str, message: Message) -> Message:
     ct_name = 'py' + gen_uuid()  # container_name
     filename = f'{SHM}/{ct_name}.py'
+    logging.info(f'[func.lang.python run_python]\t{ct_name=} {code=}')
     with open(filename, 'w', encoding='utf-8') as f:
         f.write(code)
     bash_file = create_bash_script(ct_name, filename)
