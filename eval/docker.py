@@ -35,6 +35,7 @@ def read_output_files(name: str):
         with open(stat, 'r', encoding='utf-8') as f:
             statistic = f.read()
         statistic = trim_text(statistic)
+    logging.info(f'[eval.docker read_output_files]\t{name=} {output=} {error=} {statistic=}')
     return output, error, statistic
 
 

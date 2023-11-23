@@ -20,6 +20,7 @@ async def run_python(code: str, message: Message) -> Message:
         command=command,
         name=ct_name,
         image=DOCKER_IMAGES['python'],
+        code_file=filename,
     )
 
 

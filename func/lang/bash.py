@@ -19,7 +19,7 @@ async def run_bash(code: str, message: Message) -> Message:
         message=message,
         command=command,
         name=ct_name,
-        image=DOCKER_IMAGES['python'],
+        image=DOCKER_IMAGES['bash'],
     )
 
 

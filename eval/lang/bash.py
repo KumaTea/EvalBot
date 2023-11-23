@@ -13,7 +13,7 @@ def create_bash_script(ct_name: str, bash_file: str) -> str:
         f'\n'
         f'touch {exit_sign}'
     )
-    filename = f'{SHM}/{ct_name}.sh'
+    filename = f'{SHM}/{ct_name}.outer.sh'
     with open(filename, 'w', encoding='utf-8') as f:
         f.write(command)
     return filename

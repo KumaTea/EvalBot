@@ -7,10 +7,10 @@ from pyrogram.enums.parse_mode import ParseMode
 from eval.docker import run_docker, container_exited, clean_container, read_output_files, clean_files
 
 
-def gen_result(output, error, statistic):
+def gen_result(output, error, statistic, code_file=None):
     result_text = ''
     if output:
-        if len(output.split('\n')) > 3:
+        if len(output.split()) > 3:
             result_text += f'```log\n{output}\n```\n'
         else:
             result_text += f'`{output}`\n'
@@ -18,7 +18,9 @@ def gen_result(output, error, statistic):
         result_text += '(no output)\n'
     if error:
         result_text += '\nError:\n'
-        if len(error.split('\n')) > 3:
+        if code_file:
+            error.replace(code_file, '<code>')
+        if len(error.split()) > 3:
             result_text += f'```log\n{error}\n```\n'
         else:
             result_text += f'`{error}`\n'
@@ -26,7 +28,13 @@ def gen_result(output, error, statistic):
     return result_text
 
 
-async def run(message: Message, command: str, name: str, image: str) -> Message:
+async def run(
+        message: Message,
+        command: str,
+        name: str,
+        image: str,
+        code_file: str = None,
+) -> Message:
     chat_id = message.chat.id
     trusted = chat_id in trusted_group
     limits = TRUSTED_LIMITS if trusted else DOCKER_LIMITS
@@ -52,7 +60,8 @@ async def run(message: Message, command: str, name: str, image: str) -> Message:
         if container_exited(name):
             logging.info(f'[func.runner run]\t{chat_id=} {name=} exited')
             output, error, statistic = read_output_files(name)
-            result_text = gen_result(output, error, statistic)
+            result_text = gen_result(output, error, statistic, code_file)
+            logging.info(f'[func.runner run]\t{chat_id=} {name=} {result_text=}')
             inform, _ = await asyncio.gather(
                 inform.edit_text(result_text, parse_mode=ParseMode.MARKDOWN),
                 clean_container(name)
@@ -70,8 +79,8 @@ async def run(message: Message, command: str, name: str, image: str) -> Message:
     # timeout
     logging.info(f'[func.runner run]\t{chat_id=} {name=} timeout')
     output, error, statistic = read_output_files(name)
-    result_text = gen_result(output, error, statistic)
-
+    result_text = gen_result(output, error, statistic, code_file)
+    logging.info(f'[func.runner run]\t{chat_id=} {name=} {result_text=}')
     inform, _ = await asyncio.gather(
         inform.edit_text(f'{TIMEOUT}\n{result_text}', parse_mode=ParseMode.MARKDOWN),
         clean_container(name)
