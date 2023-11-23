@@ -18,6 +18,8 @@ SHM = '/dev/shm'
 DOCKER_IMAGES = {
     'python': 'python:3.12-slim',
     'python2': 'python:2.7',
+    # 'bash': 'bash:latest',
+    'bash': 'debian:12-slim'
 }
 
 MiB = 1024 * 1024

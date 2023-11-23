@@ -14,6 +14,8 @@ def gen_result(output, error, statistic):
             result_text += f'```log\n{output}\n```\n'
         else:
             result_text += f'`{output}`\n'
+    else:
+        result_text += '(no output)\n'
     if error:
         result_text += '\nError:\n'
         if len(error.split('\n')) > 3:

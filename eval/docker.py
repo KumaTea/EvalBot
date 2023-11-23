@@ -1,4 +1,3 @@
-import os
 import asyncio
 import logging
 from common.data import *
@@ -13,18 +12,29 @@ def get_output_files(name: str) -> tuple[str, str, str, str]:
     )
 
 
+def trim_text(text: str) -> str:
+    while text.startswith('\n'):
+        text = text[1:]
+    while text.endswith('\n'):
+        text = text[:-1]
+    return text
+
+
 def read_output_files(name: str):
     out, err, stat, _ = get_output_files(name)
-
+    output, error, statistic = '', '', ''
     if os.path.exists(out):
         with open(out, 'r', encoding='utf-8') as f:
             output = f.read()
+        output = trim_text(output)
     if os.path.exists(err):
         with open(err, 'r', encoding='utf-8') as f:
             error = f.read()
+        error = trim_text(error)
     if os.path.exists(stat):
         with open(stat, 'r', encoding='utf-8') as f:
             statistic = f.read()
+        statistic = trim_text(statistic)
     return output, error, statistic
 
 
@@ -79,7 +89,7 @@ async def run_docker(
     # not subprocess.run(command)
     # run in background, don't wait
     # subprocess.Popen(command)
-    logging.info(f'[eval.docker run_docker]\t{name=} {command=}')
+    logging.info(f'[eval.docker run_docker]\t{name=} command={" ".join(command)}')
     await asyncio.create_subprocess_exec(*command, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
 
 
