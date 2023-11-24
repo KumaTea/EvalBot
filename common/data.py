@@ -22,11 +22,11 @@ DOCKER_IMAGES = {
     'busybox': 'busybox:stable',
 }
 
-COMMANDS = {
+LANG_CMDS = {
     'bash':    ['bash',    'sh', 'shell'],
     'node':    ['node',    'js', 'nodejs', 'javascript'],
     'python':  ['python',  'py', 'python3'],
-    'busybox': ['busybox', 'sh'],
+    'busybox': ['busybox', 'ash'],
 }
 
 MiB = 1024 * 1024
