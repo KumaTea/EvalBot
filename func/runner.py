@@ -7,21 +7,39 @@ from pyrogram.enums.parse_mode import ParseMode
 from eval.docker import run_docker, container_exited, clean_container, read_output_files, clean_files
 
 
+def gen_output(output: str, limit: int = 2000):
+    if len(output) > limit:
+        notify = f'(too long! Last {limit} chars are shown)'
+        count = len(notify) + 1
+        out = []
+        for line in reversed(output.splitlines()):
+            if count + len(line) + 1 < limit:
+                out.insert(0, line)
+                count += len(line) + 1
+            else:
+                break
+        out.insert(0, notify)
+        output = '\n'.join(out)
+    return output
+
+
 def gen_result(output, error, statistic, code_file=None):
     result_text = ''
     if output:
+        text = gen_output(output)
         if len(output.splitlines()) > 3:
-            result_text += f'```log\n{output}\n```\n'
+            result_text += f'```log\n{text}\n```\n'
         else:
-            result_text += f'`{output}`\n'
+            result_text += f'`{text}`\n'
     if error:
         result_text += '\nError:\n'
         if code_file:
             error = error.replace(code_file, '<code>')
+        text = gen_output(error)
         if len(error.splitlines()) > 3:
-            result_text += f'```log\n{error}\n```\n'
+            result_text += f'```log\n{text}\n```\n'
         else:
-            result_text += f'`{error}`\n'
+            result_text += f'`{text}`\n'
     if not result_text:
         result_text = '(no output)'
     # fix stat later
