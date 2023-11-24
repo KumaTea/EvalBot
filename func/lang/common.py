@@ -3,7 +3,6 @@ from pyrogram import Client
 from func.runner import run
 from typing import Callable
 from pyrogram.types import Message
-from bot.auth import ensure_not_bl
 from bot.tools import get_command_content
 
 
@@ -31,7 +30,6 @@ async def run_lang(
     )
 
 
-@ensure_not_bl
 async def command_lang(client: Client, message: Message, run_lang_func: Callable) -> Message:
     content = get_command_content(message)
     if not content:

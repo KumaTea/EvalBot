@@ -2,6 +2,7 @@ import logging
 from pyrogram import Client
 from bot.tools import gen_uuid
 from pyrogram.types import Message
+from bot.auth import ensure_not_bl
 from common.data import SHM, DOCKER_IMAGES
 from eval.lang.node import create_bash_script
 from func.lang.common import run_lang, command_lang
@@ -24,5 +25,6 @@ async def run_node(code: str, message: Message) -> Message:
     )
 
 
+@ensure_not_bl
 async def command_node(client: Client, message: Message) -> Message:
     return await command_lang(client, message, run_node)

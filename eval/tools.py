@@ -25,9 +25,11 @@ def format_ram_usage(peak_mem: str) -> str:
 
 
 def startup_clean():
-    subprocess.run(REMOVE_UNTAGGED, shell=True, executable='/bin/bash')
-    subprocess.run(STOP_ALL, shell=True, executable='/bin/bash')
-    subprocess.run(REMOVE_ALL, shell=True, executable='/bin/bash')
+    bash = '/bin/bash'
+    null = subprocess.DEVNULL
+    subprocess.run(REMOVE_UNTAGGED, shell=True, executable=bash, stdout=null, stderr=null)
+    subprocess.run(STOP_ALL, shell=True, executable=bash, stdout=null, stderr=null)
+    subprocess.run(REMOVE_ALL, shell=True, executable=bash, stdout=null, stderr=null)
 
 
 def pull_all():

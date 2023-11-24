@@ -1,6 +1,7 @@
 import logging
 from pyrogram import Client
 from bot.tools import gen_uuid
+from bot.auth import ensure_not_bl
 from pyrogram.types import Message
 from common.data import SHM, DOCKER_IMAGES
 from eval.lang.bash import create_bash_script
@@ -24,5 +25,6 @@ async def run_bash(code: str, message: Message) -> Message:
     )
 
 
+@ensure_not_bl
 async def command_bash(client: Client, message: Message) -> Message:
     return await command_lang(client, message, run_bash)
