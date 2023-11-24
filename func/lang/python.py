@@ -1,36 +1,28 @@
 import logging
 from common.data import *
 from pyrogram import Client
-from typing import Optional
-from func.runner import run
+from bot.tools import gen_uuid
 from pyrogram.types import Message
-from bot.auth import ensure_not_bl
 from eval.lang.python import create_bash_script
-from bot.tools import get_command_content, gen_uuid
+from func.lang.common import run_lang, command_lang
 
 
 async def run_python(code: str, message: Message) -> Message:
-    ct_name = 'py' + gen_uuid()  # container_name
-    os.mkdir(f'{SHM}/{ct_name}')
+    ct_name = 'py' + gen_uuid()
     filename = f'{SHM}/{ct_name}.py'
     real_filename = f'{SHM}/{ct_name}/{ct_name}.py'
     logging.info(f'[func.lang.python run_python]\t{ct_name=} {code=}')
-    with open(real_filename, 'w', encoding='utf-8') as f:
-        f.write(code)
-    bash_file = create_bash_script(ct_name, filename)
-    command = f'bash {bash_file}'
-    return await run(
+    return await run_lang(
+        code=code,
         message=message,
-        command=command,
-        name=ct_name,
+        ct_name=ct_name,
         image=DOCKER_IMAGES['python'],
-        code_file=filename,
+        filename=filename,
+        real_filename=real_filename,
+        create_lang_script=create_bash_script,
+        executor='bash',
     )
 
 
-@ensure_not_bl
-async def command_python(client: Client, message: Message) -> Optional[Message]:
-    content = get_command_content(message)
-    if not content:
-        return await message.reply_text(NO_CODE, quote=False)
-    return await run_python(content, message)
+async def command_python(client: Client, message: Message) -> Message:
+    return await command_lang(client, message, run_python)

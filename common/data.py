@@ -16,17 +16,17 @@ SHM = '/dev/shm'
 
 
 DOCKER_IMAGES = {
-    'python': 'python:3.12-slim',
-    # 'python2': 'python:2.7-slim',
-    # 'bash': 'bash:latest',
-    'bash': 'debian:12-slim',
-    'node': 'node:lts-slim',
+    'bash':    'debian:12-slim',
+    'node':    'node:lts-slim',
+    'python':  'python:3.12-slim',
+    'busybox': 'busybox:stable',
 }
 
 COMMANDS = {
-    'bash': ['bash', 'sh', 'shell'],
-    'node': ['js', 'node', 'nodejs', 'javascript'],
-    'python': ['py', 'python', 'python3'],
+    'bash':    ['bash',    'sh', 'shell'],
+    'node':    ['node',    'js', 'nodejs', 'javascript'],
+    'python':  ['python',  'py', 'python3'],
+    'busybox': ['busybox', 'sh'],
 }
 
 MiB = 1024 * 1024
@@ -50,9 +50,9 @@ TRUSTED_LIMITS = {
 }
 
 NO_CODE = '未提供代码。'
-CREATING = '正在创建任务...'
-RUNNING = '正在创建任务...已完成\n正在运行...'
-TIMEOUT = '任务超时。'
+CREATING = '正在创建 `{IMAGE}` 容器...'
+RUNNING = '正在创建 `{IMAGE}` 容器...完成\n正在运行...'
+TIMEOUT = '任务超时！'
 
 # commands
 REMOVE_UNTAGGED = 'docker rmi $(docker images -f "dangling=true" -q)'

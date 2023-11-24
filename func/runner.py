@@ -36,7 +36,7 @@ async def run(
     logging.info(f'[func.runner run]\t{chat_id=} {trusted=} {name=} {image=} {command=}')
 
     inform, _ = await asyncio.gather(
-        message.reply_text(CREATING, quote=False),
+        message.reply_text(CREATING.format(IMAGE=image), quote=False),
         run_docker(
             name=name,
             image=image,
@@ -62,7 +62,7 @@ async def run(
             if not creation_informed and time.time() - t0 > 5:
                 creation_informed = True
                 logging.info(f'[func.runner run]\t{chat_id=} {name=} creation_informed')
-                await inform.edit_text(RUNNING)
+                await inform.edit_text(RUNNING.format(IMAGE=image))
 
     # timeout
     inform = await read_and_finish(name, code_file, inform, timeout=True)
