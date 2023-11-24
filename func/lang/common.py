@@ -1,9 +1,9 @@
 from common.data import *
 from pyrogram import Client
 from func.runner import run
+from typing import Callable
 from pyrogram.types import Message
 from bot.auth import ensure_not_bl
-from typing import Optional, Callable
 from bot.tools import get_command_content
 
 

@@ -1,8 +1,8 @@
 import logging
-from common.data import *
 from pyrogram import Client
 from bot.tools import gen_uuid
 from pyrogram.types import Message
+from common.data import SHM, DOCKER_IMAGES
 from eval.lang.python import create_bash_script
 from func.lang.common import run_lang, command_lang
 

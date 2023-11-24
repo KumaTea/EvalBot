@@ -3,3 +3,4 @@ from func.limit import show_limit
 from func.lang.bash import command_bash
 from func.lang.node import command_node
 from func.lang.python import command_python
+from func.lang.busybox import command_busybox
