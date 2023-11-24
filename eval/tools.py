@@ -28,3 +28,8 @@ def startup_clean():
     subprocess.run(REMOVE_UNTAGGED, shell=True)
     subprocess.run(STOP_ALL, shell=True)
     subprocess.run(REMOVE_ALL, shell=True)
+
+
+def pull_all():
+    for image in DOCKER_IMAGES.values():
+        subprocess.run(f'docker pull {image}', shell=True)
