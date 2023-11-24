@@ -23,23 +23,33 @@ def gen_output(output: str, limit: int = 2000):
     return output
 
 
+def wrap_code(text: str, long=True):
+    if long:
+        if '```' in text:
+            result = f'<pre lang="log">\n{text}\n</pre>'
+        else:
+            result = f'```\n{text}\n```'
+    else:
+        if '`' in text:
+            result = f'<code>{text}</code>'
+        else:
+            result = f'`{text}`'
+    return result
+
+
 def gen_result(output, error, statistic, code_file=None):
     result_text = ''
     if output:
         text = gen_output(output)
-        if len(output.splitlines()) > 3:
-            result_text += f'```log\n{text}\n```\n'
-        else:
-            result_text += f'`{text}`\n'
+        is_long = len(output.splitlines()) > 3
+        result_text += wrap_code(text, long=is_long)
     if error:
         result_text += '\nERROR:\n'
         if code_file:
-            error = error.replace(code_file, '<code>')
+            error = error.replace(code_file, '[code]')
         text = gen_output(error)
-        if len(error.splitlines()) > 3:
-            result_text += f'```log\n{text}\n```\n'
-        else:
-            result_text += f'`{text}`\n'
+        is_long = len(error.splitlines()) > 3
+        result_text += wrap_code(text, long=is_long)
     if not result_text:
         result_text = '(no output)'
     # fix stat later
@@ -55,7 +65,7 @@ async def read_and_finish(name: str, code_file: str = None, inform: Message = No
     else:
         text = result_text
     inform, _ = await asyncio.gather(
-        inform.edit_text(text, parse_mode=ParseMode.MARKDOWN),
+        inform.edit_text(text),
         clean_container(name)
     )
     clean_files(name)
@@ -101,7 +111,7 @@ async def run(
             if not creation_informed and time.time() - t0 > 5:
                 creation_informed = True
                 logging.info(f'[func.runner run]\t{chat_id=} {name=} creation_informed')
-                await inform.edit_text(RUNNING, parse_mode=ParseMode.MARKDOWN)
+                await inform.edit_text(RUNNING)
 
     # timeout
     inform = await read_and_finish(name, code_file, inform, timeout=True)
