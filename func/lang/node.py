@@ -5,7 +5,7 @@ from typing import Optional
 from func.runner import run
 from pyrogram.types import Message
 from bot.auth import ensure_not_bl
-from eval.lang.python import create_bash_script
+from eval.lang.node import create_bash_script
 from bot.tools import get_command_content, gen_uuid
 
 

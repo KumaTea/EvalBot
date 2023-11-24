@@ -20,7 +20,7 @@ DOCKER_IMAGES = {
     # 'python2': 'python:2.7-slim',
     # 'bash': 'bash:latest',
     'bash': 'debian:12-slim',
-    'node': 'lts-slim',
+    'node': 'node:lts-slim',
 }
 
 COMMANDS = {
