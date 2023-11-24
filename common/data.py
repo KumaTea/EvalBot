@@ -46,3 +46,8 @@ NO_CODE = '未提供代码。'
 CREATING = '正在创建任务...'
 RUNNING = '正在创建任务...已完成\n正在运行...'
 TIMEOUT = '任务超时。'
+
+# commands
+REMOVE_UNTAGGED = 'docker rmi $(docker images -f "dangling=true" -q)'
+STOP_ALL = 'docker stop $(docker ps -a -q)'
+REMOVE_ALL = 'docker rm $(docker ps -a -q)'

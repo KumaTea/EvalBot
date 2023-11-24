@@ -28,14 +28,17 @@ def trim_text(text: str) -> str:
 def read_output_files(name: str):
     out, err, stat, _ = get_output_files(name, real_path=True)
     output, error, statistic = '', '', ''
-    if os.path.exists(out):
-        with open(out, 'r', encoding='utf-8') as f:
-            output = f.read()
-        output = trim_text(output)
-    if os.path.exists(err):
-        with open(err, 'r', encoding='utf-8') as f:
-            error = f.read()
-        error = trim_text(error)
+    try:
+        if os.path.exists(out):
+            with open(out, 'r', encoding='utf-8') as f:
+                output = f.read()
+            output = trim_text(output)
+        if os.path.exists(err):
+            with open(err, 'r', encoding='utf-8') as f:
+                error = f.read()
+            error = trim_text(error)
+    except UnicodeDecodeError:
+        error = 'UnicodeDecodeError'
     if os.path.exists(stat):
         with open(stat, 'r', encoding='utf-8') as f:
             statistic = f.read()
@@ -109,5 +112,7 @@ async def clean_container(name: str) -> None:
     stop_command = f'docker stop {name}'
     rm_command = f'docker rm {name}'
     logging.info(f'[eval.docker clean_container]\t{name=} {stop_command=} {rm_command=}')
-    await asyncio.create_subprocess_exec(*stop_command.split(), stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+    p = await asyncio.create_subprocess_exec(*stop_command.split(), stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+    # ensure done
+    await p.communicate()
     await asyncio.create_subprocess_exec(*rm_command.split(), stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)

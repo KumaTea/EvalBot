@@ -1,3 +1,8 @@
+import logging
+import subprocess
+from common.data import *
+
+
 def analyze_stat(stat: str):
     used_time = ''
     peak_mem = ''
@@ -17,3 +22,9 @@ def format_ram_usage(peak_mem: str) -> str:
         return f'{mem_usage / 1024:.3f} MB'
     else:
         return f'{mem_usage / 1024 / 1024:.3f} GB'
+
+
+def startup_clean():
+    subprocess.run(REMOVE_UNTAGGED, shell=True)
+    subprocess.run(STOP_ALL, shell=True)
+    subprocess.run(REMOVE_ALL, shell=True)

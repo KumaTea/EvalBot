@@ -32,7 +32,7 @@ def gen_result(output, error, statistic, code_file=None):
         else:
             result_text += f'`{text}`\n'
     if error:
-        result_text += '\nError:\n'
+        result_text += '\nERROR:\n'
         if code_file:
             error = error.replace(code_file, '<code>')
         text = gen_output(error)
