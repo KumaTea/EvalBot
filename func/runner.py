@@ -10,7 +10,7 @@ from eval.docker import run_docker, container_exited, clean_container, read_outp
 def gen_result(output, error, statistic, code_file=None):
     result_text = ''
     if output:
-        if len(output.split()) > 3:
+        if len(output.splitlines()) > 3:
             result_text += f'```log\n{output}\n```\n'
         else:
             result_text += f'`{output}`\n'
@@ -18,7 +18,7 @@ def gen_result(output, error, statistic, code_file=None):
         result_text += '\nError:\n'
         if code_file:
             error = error.replace(code_file, '<code>')
-        if len(error.split()) > 3:
+        if len(error.splitlines()) > 3:
             result_text += f'```log\n{error}\n```\n'
         else:
             result_text += f'`{error}`\n'
@@ -26,6 +26,22 @@ def gen_result(output, error, statistic, code_file=None):
         result_text = '(no output)'
     # fix stat later
     return result_text
+
+
+async def read_and_finish(name: str, code_file: str = None, inform: Message = None, timeout=False) -> Message:
+    output, error, statistic = read_output_files(name)
+    result_text = gen_result(output, error, statistic, code_file)
+    # logging.info(f'[func.runner run]\t{chat_id=} {name=} {result_text=}')
+    if timeout:
+        text = f'{TIMEOUT}\n{result_text}'
+    else:
+        text = result_text
+    inform, _ = await asyncio.gather(
+        inform.edit_text(text, parse_mode=ParseMode.MARKDOWN),
+        clean_container(name)
+    )
+    clean_files(name)
+    return inform
 
 
 async def run(
@@ -61,14 +77,7 @@ async def run(
 
         if container_exited(name):
             logging.info(f'[func.runner run]\t{chat_id=} {name=} exited')
-            output, error, statistic = read_output_files(name)
-            result_text = gen_result(output, error, statistic, code_file)
-            # logging.info(f'[func.runner run]\t{chat_id=} {name=} {result_text=}')
-            inform, _ = await asyncio.gather(
-                inform.edit_text(result_text, parse_mode=ParseMode.MARKDOWN),
-                clean_container(name)
-            )
-            clean_files(name)
+            inform = await read_and_finish(name, code_file, inform)
             return inform
         else:
             if not creation_informed and time.time() - t0 > 5:
@@ -77,13 +86,5 @@ async def run(
                 await inform.edit_text(RUNNING, parse_mode=ParseMode.MARKDOWN)
 
     # timeout
-    logging.info(f'[func.runner run]\t{chat_id=} {name=} timeout')
-    output, error, statistic = read_output_files(name)
-    result_text = gen_result(output, error, statistic, code_file)
-    # logging.info(f'[func.runner run]\t{chat_id=} {name=} {result_text=}')
-    inform, _ = await asyncio.gather(
-        inform.edit_text(f'{TIMEOUT}\n{result_text}', parse_mode=ParseMode.MARKDOWN),
-        clean_container(name)
-    )
-    clean_files(name)
+    inform = await read_and_finish(name, code_file, inform, timeout=True)
     return inform

@@ -1,14 +1,19 @@
+import shutil
 import asyncio
 import logging
 from common.data import *
 
 
-def get_output_files(name: str) -> tuple[str, str, str, str]:
+def get_output_files(name: str, real_path: bool) -> tuple[str, str, str, str]:
+    if real_path:
+        path = f'{SHM}/{name}'
+    else:
+        path = SHM
     return (
-        f'{SHM}/{name}-out.txt',
-        f'{SHM}/{name}-err.txt',
-        f'{SHM}/{name}-stat.txt',
-        f'{SHM}/{name}-exit.txt'
+        f'{path}/out.txt',
+        f'{path}/err.txt',
+        f'{path}/stat.txt',
+        f'{path}/exit.txt'
     )
 
 
@@ -21,7 +26,7 @@ def trim_text(text: str) -> str:
 
 
 def read_output_files(name: str):
-    out, err, stat, _ = get_output_files(name)
+    out, err, stat, _ = get_output_files(name, real_path=True)
     output, error, statistic = '', '', ''
     if os.path.exists(out):
         with open(out, 'r', encoding='utf-8') as f:
@@ -40,9 +45,10 @@ def read_output_files(name: str):
 
 
 def clean_files(name: str) -> None:
-    files = [f for f in os.listdir(SHM) if f.startswith(name)]
-    for f in files:
-        os.remove(f'{SHM}/{f}')
+    # files = [f for f in os.listdir(SHM) if f.startswith(name)]
+    # for f in files:
+    #     os.remove(f'{SHM}/{f}')
+    return shutil.rmtree(f'{SHM}/{name}')
 
 
 async def run_docker(
@@ -78,9 +84,9 @@ async def run_docker(
 
     # mounts
     # mounts: shm
-    command.extend(['--volume', f'{SHM}:{SHM}'])
+    command.extend(['--volume', f'{SHM}/{name}:{SHM}'])
     # mounts: GNU time
-    command.extend(['--volume', f'/usr/bin/time:/usr/bin/time'])
+    command.extend(['--volume', f'/usr/bin/time:/usr/bin/time:ro'])
 
     # image
     command.append(image)
@@ -95,7 +101,8 @@ async def run_docker(
 
 
 def container_exited(name: str) -> bool:
-    return os.path.exists(f'{SHM}/{name}-exit.txt')
+    _, _, _, exit_sign = get_output_files(name, real_path=True)
+    return os.path.exists(exit_sign)
 
 
 async def clean_container(name: str) -> None:

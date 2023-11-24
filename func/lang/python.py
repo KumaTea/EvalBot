@@ -11,9 +11,11 @@ from bot.tools import get_command_content, gen_uuid
 
 async def run_python(code: str, message: Message) -> Message:
     ct_name = 'py' + gen_uuid()  # container_name
+    os.mkdir(f'{SHM}/{ct_name}')
     filename = f'{SHM}/{ct_name}.py'
+    real_filename = f'{SHM}/{ct_name}/{ct_name}.py'
     logging.info(f'[func.lang.python run_python]\t{ct_name=} {code=}')
-    with open(filename, 'w', encoding='utf-8') as f:
+    with open(real_filename, 'w', encoding='utf-8') as f:
         f.write(code)
     bash_file = create_bash_script(ct_name, filename)
     command = f'bash {bash_file}'
