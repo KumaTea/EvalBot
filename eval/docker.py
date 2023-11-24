@@ -111,8 +111,10 @@ def container_exited(name: str) -> bool:
 async def clean_container(name: str) -> None:
     stop_command = f'docker stop {name}'
     rm_command = f'docker rm {name}'
+    combined = f'{stop_command} && {rm_command}'
     logging.info(f'[eval.docker clean_container]\t{name=} {stop_command=} {rm_command=}')
-    p = await asyncio.create_subprocess_exec(*stop_command.split(), stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
-    # ensure done
-    await p.communicate()
-    await asyncio.create_subprocess_exec(*rm_command.split(), stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+    # p = await asyncio.create_subprocess_exec(*stop_command.split(), stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+    # # ensure done
+    # await p.communicate()
+    # await asyncio.create_subprocess_exec(*rm_command.split(), stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+    await asyncio.create_subprocess_shell(combined, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
