@@ -59,9 +59,9 @@ TRUSTED_LIMITS = {
     'no_net': False,
 }
 
-COMMON_LIMITS = {
-    'write_bps': 10 * MiB,
-}
+# COMMON_LIMITS = {
+#     'write_bps': '10m',
+# }
 
 NO_CODE = '未提供代码。'
 CREATING = '正在创建 `{IMAGE}` 容器...'

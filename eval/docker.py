@@ -95,7 +95,8 @@ async def run_docker(
 
     # common
     # limits: write
-    command.extend(['--device-write-bps', f"/dev/sda:{COMMON_LIMITS['write_bps']}"])
+    # command.extend(['--device-write-bps', f"/dev/sda:{COMMON_LIMITS['write_bps']}"])
+    # limit on host side
 
     # mounts
     # mounts: shm
