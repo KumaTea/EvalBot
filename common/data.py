@@ -16,8 +16,14 @@ SHM = '/dev/shm'
 
 
 DOCKER_IMAGES = {
+    # If there is a stable version, use it.
+    # Otherwise, use the slim image
+    # based on Debian's latest stable version.
+
     'bash':    'debian:12-slim',
     'node':    'node:lts-slim',
+    'perl':    'perl:slim',
+    'ruby':    'ruby:slim',
     'python':  'python:3.12-slim',
     'busybox': 'busybox:stable',
 }
@@ -25,6 +31,8 @@ DOCKER_IMAGES = {
 LANG_CMDS = {
     'bash':    ['bash',    'sh', 'shell'],
     'node':    ['node',    'js', 'nodejs', 'javascript'],
+    'perl':    ['perl',    'pl'],
+    'ruby':    ['ruby',    'rb'],
     'python':  ['python',  'py', 'python3'],
     'busybox': ['busybox', 'ash'],
 }
@@ -36,7 +44,8 @@ DOCKER_LIMITS = {
     'memory': 64 * MiB,
     'timeout': 60,
     'shm_size': 64 * MiB,
-    'read_only': True,
+    'read_only': False,
+    'disk_quota': 64 * MiB,
     'no_net': True,
 }
 
@@ -46,6 +55,7 @@ TRUSTED_LIMITS = {
     'timeout': 120,
     'shm_size': 256 * MiB,
     'read_only': False,
+    'disk_quota': 256 * MiB,
     'no_net': False,
 }
 

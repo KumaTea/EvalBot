@@ -14,7 +14,8 @@ async def show_limit(client: Client, message: Message) -> Message:
     text += f"MEM: {limits['memory'] / MiB}MB\n"
     text += f"SHM: {limits['shm_size'] / MiB}MB\n"
     text += f"TME: {limits['timeout']}s\n"
-    text += f"R/W: {not limits['read_only']}\n"
+    read_write = f"{limits['disk_quota'] / MiB}MB" if not limits['read_only'] else 'R/O'
+    text += f"R/W: {read_write}\n"
     text += f"NET: {not limits['no_net']}\n"
     text += '```'
     return await message.reply_text(text, quote=False)

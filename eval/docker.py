@@ -62,6 +62,7 @@ async def run_docker(
         memory: int = DOCKER_LIMITS['memory'],
         shm_size: int = DOCKER_LIMITS['shm_size'],
         read_only: bool = DOCKER_LIMITS['read_only'],
+        disk_quota: int = None,
         no_net: bool = DOCKER_LIMITS['no_net'],
 ) -> None:
     command = []
@@ -81,6 +82,9 @@ async def run_docker(
     # limits: read_only
     if read_only:
         command.append('--read-only')
+    # limits: disk_quota
+    if disk_quota:
+        command.extend(['--storage-opt', f'size={disk_quota}'])
     # network
     if no_net:
         command.append('--network=none')
