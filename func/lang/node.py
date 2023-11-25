@@ -21,7 +21,6 @@ async def run_node(code: str, message: Message) -> Message:
         filename=filename,
         real_filename=real_filename,
         create_lang_script=create_bash_script,
-        executor='bash',
     )
 
 

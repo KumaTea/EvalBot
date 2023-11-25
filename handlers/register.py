@@ -12,6 +12,8 @@ def register_handlers():
     # langs
     eval_bot.add_handler(MessageHandler(command_bash, filters.command(LANG_CMDS['bash']) & filters.group))
     eval_bot.add_handler(MessageHandler(command_node, filters.command(LANG_CMDS['node']) & filters.group))
+    eval_bot.add_handler(MessageHandler(command_perl, filters.command(LANG_CMDS['perl']) & filters.group))
+    eval_bot.add_handler(MessageHandler(command_ruby, filters.command(LANG_CMDS['ruby']) & filters.group))
     eval_bot.add_handler(MessageHandler(command_python, filters.command(LANG_CMDS['python']) & filters.group))
     eval_bot.add_handler(MessageHandler(command_busybox, filters.command(LANG_CMDS['busybox']) & filters.group))
 

@@ -14,13 +14,13 @@ async def run_lang(
         filename: str,
         real_filename: str,
         create_lang_script: Callable,
-        executor: str = 'bash',
+        script_executor: str = 'bash',
 ) -> Message:
     os.mkdir(f'{SHM}/{ct_name}')
     with open(real_filename, 'w', encoding='utf-8') as f:
         f.write(code)
     script_file = create_lang_script(ct_name, filename)
-    command = f'{executor} {script_file}'
+    command = f'{script_executor} {script_file}'
     return await run(
         message=message,
         command=command,

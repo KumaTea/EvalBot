@@ -21,7 +21,7 @@ async def run_busybox(code: str, message: Message) -> Message:
         filename=filename,
         real_filename=real_filename,
         create_lang_script=create_bash_script,
-        executor='sh',
+        script_executor='sh',
     )
 
 
