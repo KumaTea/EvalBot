@@ -59,6 +59,10 @@ TRUSTED_LIMITS = {
     'no_net': False,
 }
 
+COMMON_LIMITS = {
+    'write_bps': 10 * MiB,
+}
+
 NO_CODE = '未提供代码。'
 CREATING = '正在创建 `{IMAGE}` 容器...'
 RUNNING = '正在创建 `{IMAGE}` 容器...完成\n正在运行...'

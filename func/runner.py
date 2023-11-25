@@ -45,6 +45,7 @@ async def run(
             memory=limits['memory'],
             shm_size=limits['shm_size'],
             read_only=limits['read_only'],
+            disk_quota=limits['disk_quota'],
             no_net=limits['no_net'],
         )
     )

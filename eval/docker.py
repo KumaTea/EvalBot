@@ -73,6 +73,7 @@ async def run_docker(
     command.append('-d')
 
     # limits
+    # specific
     # limits: cpu
     command.extend(['--cpus', str(cpu)])
     # limits: memory
@@ -83,11 +84,18 @@ async def run_docker(
     if read_only:
         command.append('--read-only')
     # limits: disk_quota
-    if disk_quota:
-        command.extend(['--storage-opt', f'size={disk_quota}'])
+    else:
+        if disk_quota:
+            command.extend(['--storage-opt', f'size={disk_quota}'])
+        else:
+            command.append('--read-only')
     # network
     if no_net:
         command.append('--network=none')
+
+    # common
+    # limits: write
+    command.extend(['--device-write-bps', f"/dev/sda:{COMMON_LIMITS['write_bps']}"])
 
     # mounts
     # mounts: shm
