@@ -3,6 +3,7 @@ from typing import Optional
 from bot.session import msg_store
 from common.data import LANG_CMDS
 from pyrogram.types import Message
+from bot.tools import get_command_content
 
 
 def lang_detect(message: Message) -> Optional[str]:
@@ -31,4 +32,5 @@ async def edited_process(message: Message) -> Optional[Message]:
     if not command:
         return None
 
-    return await command(message.text, message, edited=True, inform=my_response)
+    code = get_command_content(message)
+    return await command(code, message, edited=True, inform=my_response)

@@ -14,7 +14,7 @@ async def run_python(code: str, message: Message, edited: bool = False, inform: 
     real_filename = f'{SHM}/{ct_name}/{ct_name}.py'
     logging.info(f'[func.lang.python run_python]\t{ct_name=} {code=}')
     return await select_run_lang(
-        edited=False,
+        edited=edited,
         code=code,
         message=message,
         ct_name=ct_name,

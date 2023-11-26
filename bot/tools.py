@@ -1,6 +1,10 @@
+import re
 import uuid
 from typing import Optional
 from pyrogram.types import Message
+
+
+cmd_pattern = re.compile(r'^/\w+@?\w+[\s\n]')
 
 
 def get_command_content(message: Message) -> Optional[str]:
@@ -13,10 +17,9 @@ def get_command_content(message: Message) -> Optional[str]:
     if not text:
         return None
 
-    command_entity = message.entities[0]
-    if len(text) > command_entity.length:
-        text = text[command_entity.length+1:]
-        return text
+    match = cmd_pattern.match(text)
+    if match:
+        return text[match.end():]
 
     reply = message.reply_to_message
     if reply:

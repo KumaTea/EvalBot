@@ -14,7 +14,7 @@ async def run_ruby(code: str, message: Message, edited: bool = False, inform: Me
     real_filename = f'{SHM}/{ct_name}/{ct_name}.rb'
     logging.info(f'[func.lang.ruby run_ruby]\t{ct_name=} {code=}')
     return await select_run_lang(
-        edited=False,
+        edited=edited,
         code=code,
         message=message,
         ct_name=ct_name,

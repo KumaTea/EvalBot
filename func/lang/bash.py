@@ -14,7 +14,7 @@ async def run_bash(code: str, message: Message, edited: bool = False, inform: Me
     real_filename = f'{SHM}/{ct_name}/{ct_name}.sh'
     logging.info(f'[func.lang.bash run_bash]\t{ct_name=} {code=}')
     return await select_run_lang(
-        edited=False,
+        edited=edited,
         code=code,
         message=message,
         ct_name=ct_name,

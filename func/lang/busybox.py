@@ -14,7 +14,7 @@ async def run_busybox(code: str, message: Message, edited: bool = False, inform:
     real_filename = f'{SHM}/{ct_name}/{ct_name}.sh'
     logging.info(f'[func.lang.busybox run_busybox]\t{ct_name=} {code=}')
     return await select_run_lang(
-        edited=False,
+        edited=edited,
         code=code,
         message=message,
         ct_name=ct_name,
