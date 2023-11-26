@@ -10,16 +10,16 @@ def lang_detect(message: Message) -> Optional[str]:
         text = message.text
         if message.text.startswith('/'):
             text = text[1:]
-            for cmd in LANG_CMDS:
-                if text.startswith(cmd):
-                    return cmd
+            for lang in LANG_CMDS:
+                for cmd in LANG_CMDS[lang]:
+                    if text.startswith(cmd):
+                        return lang
     return None
 
 
 async def edited_process(message: Message) -> Optional[Message]:
     my_response = msg_store.get(message.chat.id, message.id)
-    need_process = bool(my_response)
-    if not need_process:
+    if my_response is None:
         return None
 
     lang = lang_detect(message)
