@@ -3,8 +3,9 @@ import asyncio
 import logging
 from common.data import *
 from func.tools import gen_result
-from bot.session import msg_store, eval_bot
 from pyrogram.types import Message
+from bot.session import msg_store, eval_bot
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from eval.docker import run_docker, container_exited, clean_container, read_output_files, clean_files
 
 
@@ -16,14 +17,27 @@ async def read_and_finish(
         timeout=False
 ) -> Message:
     output, error, statistic = read_output_files(name)
-    result_text, parse_mode = gen_result(output, error, statistic, code_file)
+    result_text, parse_mode, stat_code = gen_result(output, error, statistic, code_file)
     # logging.info(f'[func.runner run]\t{chat_id=} {name=} {result_text=}')
+
     if timeout:
         text = f'{TIMEOUT}\n{result_text}'
     else:
         text = result_text
+
+    reply_markup = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(
+                    text='📄 Stat',
+                    callback_data=stat_code
+                )
+            ]
+        ]
+    )
+
     inform, _ = await asyncio.gather(
-        inform.edit_text(text, parse_mode=parse_mode),
+        inform.edit_text(text, parse_mode=parse_mode, reply_markup=reply_markup),
         clean_container(name)
     )
     if user_msg_id:

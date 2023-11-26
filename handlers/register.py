@@ -4,8 +4,9 @@ from handlers.functions import *
 from common.data import LANG_CMDS
 from handlers.edits import process_edited
 from bot.session import eval_bot, scheduler
+from handlers.callbacks import process_callback
 from eval.tools import docker_clean, docker_pull
-from pyrogram.handlers import MessageHandler, EditedMessageHandler  # , CallbackQueryHandler
+from pyrogram.handlers import MessageHandler, EditedMessageHandler , CallbackQueryHandler
 
 
 def register_handlers():
@@ -26,7 +27,7 @@ def register_handlers():
     eval_bot.add_handler(EditedMessageHandler(process_edited, filters.group))
 
     # callbacks
-    # eval_bot.add_handler(CallbackQueryHandler(process_callback))
+    eval_bot.add_handler(CallbackQueryHandler(process_callback))
 
     return logging.info('[handlers.register register_handlers]\tHandlers registered')
 

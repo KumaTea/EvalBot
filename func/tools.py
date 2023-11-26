@@ -62,5 +62,31 @@ def gen_result(output, error, statistic, code_file=None):
         else:
             parse_mode = output_parse_mode or error_parse_mode or ParseMode.DEFAULT
 
-    # fix stat later
-    return result_text, parse_mode
+    stat_code = gen_stat_code(statistic)
+    return result_text, parse_mode, stat_code
+
+
+def analyze_stat(stat: str):
+    used_time = '?:??.??'
+    peak_mem = ''
+    exit_code = ''
+    if not stat:
+        # make it splittable
+        stat = ''
+    for line in stat.split('\n'):
+        if 'Elapsed (wall clock) time (h:mm:ss or m:ss)' in line:
+            used_time = line.split(': ')[1]
+        elif 'Maximum resident set size (kbytes): ' in line:
+            peak_mem = line.split(': ')[1]
+        elif 'Exit status: ' in line:
+            exit_code = line.split(': ')[1]
+    return used_time, peak_mem, exit_code
+
+
+def gen_stat_code(stat: str) -> str:
+    # generate Telegram Callback Data
+    task = 'stat'
+    used_time, peak_mem, exit_code = analyze_stat(stat)
+    peak_mem_hex = hex(int(peak_mem))[2:] if peak_mem else '?'
+    exit_code_hex = hex(int(exit_code))[2:] if exit_code else '?'
+    return f'{task}_{used_time}_{peak_mem_hex}_{exit_code_hex}'
