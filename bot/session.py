@@ -1,6 +1,7 @@
 import logging
 import configparser
 from pyrogram import Client
+from bot.store import MsgStore
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 
@@ -19,3 +20,5 @@ eval_bot = Client(
 )
 
 scheduler = AsyncIOScheduler()
+
+msg_store = MsgStore()

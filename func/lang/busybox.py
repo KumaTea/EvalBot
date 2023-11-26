@@ -5,15 +5,16 @@ from bot.tools import gen_uuid
 from pyrogram.types import Message
 from bot.auth import ensure_not_bl
 from eval.lang.busybox import create_bash_script
-from func.lang.common import run_lang, command_lang
+from func.lang.common import select_run_lang, command_lang
 
 
-async def run_busybox(code: str, message: Message) -> Message:
+async def run_busybox(code: str, message: Message, edited: bool = False, inform: Message = None) -> Message:
     ct_name = 'bb' + gen_uuid()
     filename = f'{SHM}/{ct_name}.sh'
     real_filename = f'{SHM}/{ct_name}/{ct_name}.sh'
     logging.info(f'[func.lang.busybox run_busybox]\t{ct_name=} {code=}')
-    return await run_lang(
+    return await select_run_lang(
+        edited=False,
         code=code,
         message=message,
         ct_name=ct_name,
@@ -22,6 +23,7 @@ async def run_busybox(code: str, message: Message) -> Message:
         real_filename=real_filename,
         create_lang_script=create_bash_script,
         script_executor='sh',
+        inform=inform
     )
 
 

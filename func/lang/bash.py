@@ -5,15 +5,16 @@ from bot.auth import ensure_not_bl
 from pyrogram.types import Message
 from common.data import SHM, DOCKER_IMAGES
 from eval.lang.bash import create_bash_script
-from func.lang.common import run_lang, command_lang
+from func.lang.common import select_run_lang, command_lang
 
 
-async def run_bash(code: str, message: Message) -> Message:
+async def run_bash(code: str, message: Message, edited: bool = False, inform: Message = None) -> Message:
     ct_name = 'sh' + gen_uuid()
     filename = f'{SHM}/{ct_name}.sh'
     real_filename = f'{SHM}/{ct_name}/{ct_name}.sh'
     logging.info(f'[func.lang.bash run_bash]\t{ct_name=} {code=}')
-    return await run_lang(
+    return await select_run_lang(
+        edited=False,
         code=code,
         message=message,
         ct_name=ct_name,
@@ -21,6 +22,7 @@ async def run_bash(code: str, message: Message) -> Message:
         filename=filename,
         real_filename=real_filename,
         create_lang_script=create_bash_script,
+        inform=inform
     )
 
 

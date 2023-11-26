@@ -5,15 +5,16 @@ from pyrogram.types import Message
 from bot.auth import ensure_not_bl
 from common.data import SHM, DOCKER_IMAGES
 from eval.lang.ruby import create_bash_script
-from func.lang.common import run_lang, command_lang
+from func.lang.common import select_run_lang, command_lang
 
 
-async def run_ruby(code: str, message: Message) -> Message:
+async def run_ruby(code: str, message: Message, edited: bool = False, inform: Message = None) -> Message:
     ct_name = 'rb' + gen_uuid()
     filename = f'{SHM}/{ct_name}.rb'
     real_filename = f'{SHM}/{ct_name}/{ct_name}.rb'
     logging.info(f'[func.lang.ruby run_ruby]\t{ct_name=} {code=}')
-    return await run_lang(
+    return await select_run_lang(
+        edited=False,
         code=code,
         message=message,
         ct_name=ct_name,
@@ -21,6 +22,7 @@ async def run_ruby(code: str, message: Message) -> Message:
         filename=filename,
         real_filename=real_filename,
         create_lang_script=create_bash_script,
+        inform=inform
     )
 
 
