@@ -8,7 +8,7 @@ from eval.lang.node import create_bash_script
 from func.lang.common import select_run_lang, command_lang
 
 
-async def run_node(code: str, message: Message, edited: bool = False, inform: Message = None) -> Message:
+async def run_node(code: str, message: Message, edited: bool = False, inform_id: int = None) -> Message:
     ct_name = 'js' + gen_uuid()
     filename = f'{SHM}/{ct_name}.js'
     real_filename = f'{SHM}/{ct_name}/{ct_name}.js'

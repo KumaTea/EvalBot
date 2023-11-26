@@ -33,7 +33,7 @@ async def run_lang(
 async def edit_run_lang(
         code: str,
         message: Message,
-        inform: Message,
+        inform_id: int,
         ct_name: str,
         image: str,
         filename: str,
@@ -48,7 +48,7 @@ async def edit_run_lang(
     command = f'{script_executor} {script_file}'
     return await edit_run(
         message=message,
-        inform=inform,
+        inform_id=inform_id,
         command=command,
         name=ct_name,
         image=image,
@@ -65,14 +65,14 @@ async def select_run_lang(
         filename: str,
         real_filename: str,
         create_lang_script: Callable,
-        inform: Message = None,
+        inform_id: int = None,
         script_executor: str = 'bash',
 ) -> Message:
     if edited:
         return await edit_run_lang(
             code=code,
             message=message,
-            inform=inform,
+            inform_id=inform_id,
             ct_name=ct_name,
             image=image,
             filename=filename,

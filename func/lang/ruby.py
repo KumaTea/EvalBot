@@ -8,7 +8,7 @@ from eval.lang.ruby import create_bash_script
 from func.lang.common import select_run_lang, command_lang
 
 
-async def run_ruby(code: str, message: Message, edited: bool = False, inform: Message = None) -> Message:
+async def run_ruby(code: str, message: Message, edited: bool = False, inform_id: int = None) -> Message:
     ct_name = 'rb' + gen_uuid()
     filename = f'{SHM}/{ct_name}.rb'
     real_filename = f'{SHM}/{ct_name}/{ct_name}.rb'
@@ -22,7 +22,7 @@ async def run_ruby(code: str, message: Message, edited: bool = False, inform: Me
         filename=filename,
         real_filename=real_filename,
         create_lang_script=create_bash_script,
-        inform=inform
+        inform_id=inform_id
     )
 
 

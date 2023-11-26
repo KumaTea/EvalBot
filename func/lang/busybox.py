@@ -8,7 +8,7 @@ from eval.lang.busybox import create_bash_script
 from func.lang.common import select_run_lang, command_lang
 
 
-async def run_busybox(code: str, message: Message, edited: bool = False, inform: Message = None) -> Message:
+async def run_busybox(code: str, message: Message, edited: bool = False, inform_id: int = None) -> Message:
     ct_name = 'bb' + gen_uuid()
     filename = f'{SHM}/{ct_name}.sh'
     real_filename = f'{SHM}/{ct_name}/{ct_name}.sh'
@@ -23,7 +23,7 @@ async def run_busybox(code: str, message: Message, edited: bool = False, inform:
         real_filename=real_filename,
         create_lang_script=create_bash_script,
         script_executor='sh',
-        inform=inform
+        inform_id=inform_id
     )
 
 

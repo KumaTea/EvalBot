@@ -3,7 +3,7 @@ import asyncio
 import logging
 from common.data import *
 from func.tools import gen_result
-from bot.session import msg_store
+from bot.session import msg_store, eval_bot
 from pyrogram.types import Message
 from eval.docker import run_docker, container_exited, clean_container, read_output_files, clean_files
 
@@ -103,19 +103,19 @@ async def run(
 
 async def edit_run(
         message: Message,
-        inform: Message,
+        inform_id: int,
         command: str,
         name: str,
         image: str,
         code_file: str = None,
 ) -> Message:
-    chat_id = inform.chat.id
+    chat_id = message.chat.id
     trusted = chat_id in trusted_group
     limits = TRUSTED_LIMITS if trusted else DOCKER_LIMITS
     logging.info(f'[func.runner run]\t{chat_id=} {trusted=} {name=} {image=} {command=}')
 
     inform, _ = await asyncio.gather(
-        inform.edit_text(CREATING.format(IMAGE=image)),
+        eval_bot.edit_message_text(chat_id, inform_id, CREATING.format(IMAGE=image)),
         run_docker(
             name=name,
             image=image,

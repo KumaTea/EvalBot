@@ -19,8 +19,8 @@ def lang_detect(message: Message) -> Optional[str]:
 
 
 async def edited_process(message: Message) -> Optional[Message]:
-    my_response = msg_store.get(message.chat.id, message.id)
-    if my_response is None:
+    my_response_id = msg_store.get(message.chat.id, message.id)
+    if my_response_id is None:
         return None
 
     lang = lang_detect(message)
@@ -33,4 +33,4 @@ async def edited_process(message: Message) -> Optional[Message]:
         return None
 
     code = get_command_content(message)
-    return await command(code, message, edited=True, inform=my_response)
+    return await command(code, message, edited=True, inform_id=my_response_id)
