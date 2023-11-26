@@ -4,14 +4,17 @@ from common.data import *
 
 
 def analyze_stat(stat: str):
-    used_time = ''
-    peak_mem = ''
+    used_time = '?:??.??'
+    peak_mem = '?'
+    exit_code = '?'
     for line in stat.split('\n'):
         if 'Elapsed (wall clock) time (h:mm:ss or m:ss)' in line:
             used_time = line.split(': ')[1]
         elif 'Maximum resident set size (kbytes): ' in line:
             peak_mem = line.split(': ')[1]
-    return used_time, peak_mem
+        elif 'Exit status: ' in line:
+            exit_code = line.split(': ')[1]
+    return used_time, peak_mem, exit_code
 
 
 def format_ram_usage(peak_mem: str) -> str:
@@ -24,7 +27,7 @@ def format_ram_usage(peak_mem: str) -> str:
         return f'{mem_usage / 1024 / 1024:.3f} GB'
 
 
-def startup_clean():
+def docker_clean():
     bash = '/bin/bash'
     null = subprocess.DEVNULL
     subprocess.run(REMOVE_UNTAGGED, shell=True, executable=bash, stdout=null, stderr=null)
@@ -32,6 +35,9 @@ def startup_clean():
     subprocess.run(REMOVE_ALL, shell=True, executable=bash, stdout=null, stderr=null)
 
 
-def pull_all():
+def docker_pull():
     for image in DOCKER_IMAGES.values():
-        subprocess.run(f'docker pull {image}', shell=True)
+        r = subprocess.run(f'docker pull {image}', shell=True)
+        result = r.stdout.decode('utf-8')
+        if 'newer image' in result:
+            logging.info('[eval.tools docker_pull]\t' + result.splitlines()[-1])

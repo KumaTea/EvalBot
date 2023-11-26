@@ -1,6 +1,7 @@
 import logging
 import configparser
 from pyrogram import Client
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 
 logging.basicConfig(
@@ -16,3 +17,5 @@ eval_bot = Client(
     api_hash=config['eval']['api_hash'],
     bot_token=config['eval']['bot_token'],
 )
+
+scheduler = AsyncIOScheduler()

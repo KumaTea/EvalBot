@@ -112,7 +112,7 @@ async def run_docker(
     # not subprocess.run(command)
     # run in background, don't wait
     # subprocess.Popen(command)
-    logging.info(f'[eval.docker run_docker]\t{name=} command={" ".join(command)}')
+    logging.info(f'[eval.docker run_docker]\t{name=}')
     await asyncio.create_subprocess_exec(*command, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
 
 

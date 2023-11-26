@@ -1,10 +1,11 @@
 import logging
 from pyrogram import filters
-from bot.session import eval_bot
 from handlers.functions import *
 from common.data import LANG_CMDS
+from bot.session import eval_bot, scheduler
 from handlers.callbacks import process_callback
-from pyrogram.handlers import MessageHandler, CallbackQueryHandler
+from eval.tools import docker_clean, docker_pull
+from pyrogram.handlers import MessageHandler, CallbackQueryHandler, EditedMessageHandler
 
 
 def register_handlers():
@@ -24,10 +25,11 @@ def register_handlers():
     # callbacks
     # eval_bot.add_handler(CallbackQueryHandler(process_callback))
 
-    return logging.info('Registered handlers')
+    return logging.info('[handlers.register register_handlers]\tHandlers registered')
 
 
-# def manager():
-#     scheduler = session.scheduler
-#     scheduler.add_job(func, 'cron', [arg1], hour=4)
-#     return logging.info('Scheduler started')
+def add_jobs():
+    scheduler.add_job(docker_clean, 'cron', hour=4, minute=0)
+    scheduler.add_job(docker_pull, 'cron', hour=2, minute=30)
+    scheduler.start()
+    return logging.info('[handlers.register manager]\tapscheduler started')
