@@ -15,7 +15,7 @@ async def callback_show_stat(client: Client, callback_query: CallbackQuery) -> t
     task, used_time, peak_mem_hex, exit_code_hex = callback_query.data.split('_')
     result = 'Statistics:\n\n'
 
-    result += f'Used Time: {used_time}\n'
+    result += f'Used Time: {used_time} s\n'
 
     if peak_mem_hex != '?':
         peak_mem = int(peak_mem_hex, 16)

@@ -22,7 +22,7 @@ async def run_node(code: str, message: Message, edited: bool = False, inform_id:
         filename=filename,
         real_filename=real_filename,
         create_lang_script=create_bash_script,
-        inform=inform,
+        inform_id=inform_id,
     )
 
 

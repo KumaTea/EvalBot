@@ -1,5 +1,10 @@
 from pyrogram.enums.parse_mode import ParseMode
 
+try:
+    from local_db import blacklist_words
+except ImportError:
+    blacklist_words = []
+
 
 def gen_output(output: str, limit: int = 2000):
     if len(output) > limit:
@@ -61,6 +66,9 @@ def gen_result(output, error, statistic, code_file=None):
             parse_mode = output_parse_mode if output_parse_mode == error_parse_mode else ParseMode.DISABLED
         else:
             parse_mode = output_parse_mode or error_parse_mode or ParseMode.DEFAULT
+
+    for word in blacklist_words:
+        result_text = result_text.replace(word, '?')
 
     stat_code = gen_stat_code(statistic)
     return result_text, parse_mode, stat_code

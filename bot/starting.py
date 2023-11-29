@@ -1,9 +1,10 @@
 import logging
-from eval.tools import docker_clean, docker_pull
+from eval.tools import docker_clean
 from handlers.register import register_handlers, add_jobs
 
 
 def starting():
+    docker_clean()
     register_handlers()
     add_jobs()
 
