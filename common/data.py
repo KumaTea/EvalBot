@@ -21,6 +21,9 @@ DOCKER_IMAGES = {
     # based on Debian's latest stable version.
 
     'bash':    'debian:12-slim',
+    'c':       'buildpack-deps:bookworm',
+    'cpp':     'buildpack-deps:bookworm',
+    'build':   'buildpack-deps:bookworm',
     'node':    'node:lts-slim',
     'perl':    'perl:slim',
     'ruby':    'ruby:slim',
@@ -29,11 +32,14 @@ DOCKER_IMAGES = {
 }
 
 LANG_CMDS = {
-    'bash':    ['bash',    'sh', 'shell'],
-    'node':    ['node',    'js', 'nodejs', 'javascript'],
-    'perl':    ['perl',    'pl'],
-    'ruby':    ['ruby',    'rb'],
-    'python':  ['python',  'py', 'python3'],
+    'bash':    ['bash', 'sh', 'shell'],
+    'c':       ['c', 'gcc', 'clang'],
+    'cpp':     ['cpp', 'c++', 'g++'],
+    'build':   ['build'],
+    'node':    ['node', 'js', 'nodejs', 'javascript'],
+    'perl':    ['perl', 'pl'],
+    'ruby':    ['ruby', 'rb'],
+    'python':  ['python', 'py', 'python3'],
     'busybox': ['busybox', 'ash'],
 }
 

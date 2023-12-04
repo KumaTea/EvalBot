@@ -12,7 +12,8 @@ def docker_clean():
 
 
 def docker_pull():
-    for image in DOCKER_IMAGES.values():
+    images = list(set(DOCKER_IMAGES.values()))
+    for image in images:
         r = subprocess.run(f'docker pull {image}', shell=True)
         result = r.stdout.decode('utf-8')
         if 'newer image' in result:
