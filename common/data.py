@@ -34,7 +34,7 @@ DOCKER_IMAGES = {
 LANG_CMDS = {
     'bash':    ['bash', 'sh', 'shell'],
     'c':       ['c', 'gcc', 'clang'],
-    'cpp':     ['cpp', 'c++', 'g++'],
+    'cpp':     ['cpp'],  # 'c++' and 'g++' cause regex errors
     'build':   ['build'],
     'node':    ['node', 'js', 'nodejs', 'javascript'],
     'perl':    ['perl', 'pl'],
