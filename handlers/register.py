@@ -13,6 +13,7 @@ def register_handlers():
     # group commands
     # langs
     eval_bot.add_handler(MessageHandler(command_bash, filters.command(LANG_CMDS['bash']) & filters.group))
+    eval_bot.add_handler(MessageHandler(command_build, filters.command(LANG_CMDS['build']) & filters.group))
     eval_bot.add_handler(MessageHandler(command_node, filters.command(LANG_CMDS['node']) & filters.group))
     eval_bot.add_handler(MessageHandler(command_perl, filters.command(LANG_CMDS['perl']) & filters.group))
     eval_bot.add_handler(MessageHandler(command_ruby, filters.command(LANG_CMDS['ruby']) & filters.group))
