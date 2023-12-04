@@ -54,7 +54,9 @@ def create_compile_script(
         f'&& '
         '/usr/bin/time -v '
         f'-o {stat} '
-        f'./{output_file} '
+        # f'./{output_file} '
+        # output_file is absolute path
+        f'{output_file} '
         f'1>>{out} 2>>{err} '
         f'\n'
         f'touch {exit_sign}'
