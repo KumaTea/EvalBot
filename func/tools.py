@@ -8,7 +8,7 @@ except ImportError:
 
 def gen_output(output: str, limit: int = 2000):
     if len(output) > limit:
-        notify = f'(too long! Last {limit} chars are shown)'
+        notify = f'(Too long! Last {limit} chars are shown)'
         count = len(notify) + 1
         out = []
         for line in reversed(output.splitlines()):

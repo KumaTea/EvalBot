@@ -10,10 +10,10 @@ def lang_detect(message: Message) -> Optional[str]:
     if message.text:
         text = message.text
         if message.text.startswith('/'):
-            text = text[1:]
+            command = text[1:].split()[0]
             for lang in LANG_CMDS:
                 for cmd in LANG_CMDS[lang]:
-                    if text.startswith(cmd):
+                    if cmd == command:
                         return lang
     return None
 
