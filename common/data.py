@@ -1,12 +1,6 @@
 from common.info import *
 
 
-try:
-    from local_db import trusted_group, bl_users
-except ImportError:
-    trusted_group = []
-    bl_users = []
-
 if debug_mode:
     PWD = r'D:\GitHub\EvalBot'
 else:

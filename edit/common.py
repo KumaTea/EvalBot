@@ -8,9 +8,8 @@ from bot.tools import get_command_content
 
 def lang_detect(message: Message) -> Optional[str]:
     if message.text:
-        text = message.text
         if message.text.startswith('/'):
-            command = text[1:].split()[0]
+            command = message.text[1:].split()[0]
             for lang in LANG_CMDS:
                 for cmd in LANG_CMDS[lang]:
                     if cmd == command:

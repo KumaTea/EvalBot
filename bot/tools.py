@@ -4,7 +4,7 @@ from typing import Optional
 from pyrogram.types import Message
 
 
-cmd_pattern = re.compile(r'^/\w+@?\w+[\s\n]')
+cmd_pattern = re.compile(r'^/\w+(@\w+)?[\s\n]')
 
 
 def get_command_content(message: Message) -> Optional[str]:

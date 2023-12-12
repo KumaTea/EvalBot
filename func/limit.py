@@ -2,6 +2,7 @@ from common.data import *
 from pyrogram import Client
 from pyrogram.types import Message
 from bot.auth import ensure_not_bl
+from common.local import trusted_group
 
 
 @ensure_not_bl
