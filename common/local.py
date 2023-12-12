@@ -54,3 +54,4 @@ known_group.extend(get_url_int(f'{LOCAL_URL}/known-group.txt'))
 logging.warning(f'Known groups: {len(known_group)}')
 
 blacklist_words = get_url_str(f'{LOCAL_URL}/blacklist-words.txt')
+logging.warning(f'Blacklist words: {len(blacklist_words)}')

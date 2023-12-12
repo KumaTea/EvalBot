@@ -1,9 +1,5 @@
 from pyrogram.enums.parse_mode import ParseMode
-
-try:
-    from local_db import blacklist_words
-except ImportError:
-    blacklist_words = []
+from common.local import blacklist_words
 
 
 def gen_output(output: str, limit: int = 2000):
