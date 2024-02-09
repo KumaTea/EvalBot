@@ -1,10 +1,10 @@
 from common.data import *
 from pyrogram import Client
+from bot.auth import ensure_auth
 from pyrogram.types import Message
-from bot.auth import ensure_not_bl
 
 
-@ensure_not_bl
+@ensure_auth
 async def show_avail(client: Client, message: Message) -> Message:
     text = 'Available languages:\n'
     for image in LANG_CMDS:

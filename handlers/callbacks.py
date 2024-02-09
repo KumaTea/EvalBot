@@ -1,10 +1,10 @@
 from pyrogram import Client
-from bot.auth import ensure_not_bl
+from bot.auth import ensure_auth
 from pyrogram.types import CallbackQuery
 from func.stat import callback_show_stat
 
 
-@ensure_not_bl
+@ensure_auth
 async def process_callback(client: Client, callback_query: CallbackQuery):
     task = callback_query.data.split('_')[0]
     if task == 'stat':

@@ -1,8 +1,8 @@
 import logging
 from pyrogram import Client
 from bot.tools import gen_uuid
+from bot.auth import ensure_auth
 from pyrogram.types import Message
-from bot.auth import ensure_not_bl
 from common.data import SHM, DOCKER_IMAGES
 from eval.lang.ruby import create_bash_script
 from func.lang.common import select_run_lang, command_lang
@@ -26,6 +26,6 @@ async def run_ruby(code: str, message: Message, edited: bool = False, inform_id:
     )
 
 
-@ensure_not_bl
+@ensure_auth
 async def command_ruby(client: Client, message: Message) -> Message:
     return await command_lang(client, message, run_ruby)

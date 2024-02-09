@@ -2,8 +2,8 @@ import logging
 from common.data import *
 from pyrogram import Client
 from bot.tools import gen_uuid
+from bot.auth import ensure_auth
 from pyrogram.types import Message
-from bot.auth import ensure_not_bl
 from eval.lang.busybox import create_bash_script
 from func.lang.common import select_run_lang, command_lang
 
@@ -27,6 +27,6 @@ async def run_busybox(code: str, message: Message, edited: bool = False, inform_
     )
 
 
-@ensure_not_bl
+@ensure_auth
 async def command_busybox(client: Client, message: Message) -> Message:
     return await command_lang(client, message, run_busybox)

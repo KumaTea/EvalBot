@@ -1,11 +1,11 @@
 from common.data import *
 from pyrogram import Client
+from bot.auth import ensure_auth
 from pyrogram.types import Message
-from bot.auth import ensure_not_bl
 from common.local import trusted_group
 
 
-@ensure_not_bl
+@ensure_auth
 async def show_limit(client: Client, message: Message) -> Message:
     chat_id = message.chat.id
     trusted = chat_id in trusted_group

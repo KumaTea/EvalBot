@@ -1,7 +1,7 @@
 import logging
 from pyrogram import Client
 from bot.tools import gen_uuid
-from bot.auth import ensure_not_bl
+from bot.auth import ensure_auth
 from pyrogram.types import Message
 from common.data import SHM, DOCKER_IMAGES
 from eval.lang.build import create_bash_script
@@ -26,6 +26,6 @@ async def run_build(code: str, message: Message, edited: bool = False, inform_id
     )
 
 
-@ensure_not_bl
+@ensure_auth
 async def command_build(client: Client, message: Message) -> Message:
     return await command_lang(client, message, run_build)
