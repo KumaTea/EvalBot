@@ -2,10 +2,10 @@ import logging
 from common.data import *
 from pyrogram import Client
 from bot.tools import gen_uuid
-from bot.auth import ensure_auth
+from share.auth import ensure_auth
 from pyrogram.types import Message
 from eval.lang.busybox import create_bash_script
-from func.lang.common import select_run_lang, command_lang
+from func.lang.common import command_lang, select_run_lang
 
 
 async def run_busybox(code: str, message: Message, edited: bool = False, inform_id: int = None) -> Message:

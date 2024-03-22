@@ -1,0 +1,14 @@
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+ExecStart=/bin/bash /home/kuma/EvalBot/run.sh
+Restart=always
+RestartSec=5s
+SyslogIdentifier=bot-%i
+User=%i
+
+[Unit]
+After=network.target
+Description=EvalBot
+Documentation=https://github.com/KumaTea/EvalBot

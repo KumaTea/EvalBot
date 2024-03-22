@@ -1,8 +1,8 @@
 from common.data import *
 from pyrogram import Client
-from bot.auth import ensure_auth
+from share.auth import ensure_auth
 from pyrogram.types import Message
-from common.local import trusted_group
+from share.local import trusted_group
 
 
 @ensure_auth

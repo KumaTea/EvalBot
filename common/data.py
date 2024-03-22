@@ -2,9 +2,9 @@ from common.info import *
 
 
 if debug_mode:
-    PWD = r'D:\GitHub\EvalBot'
+    pwd = r'D:\GitHub\EvalBot'
 else:
-    PWD = '/root/EvalBot'
+    pwd = '/root/EvalBot'
 
 SHM = '/dev/shm'
 

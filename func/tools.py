@@ -1,5 +1,9 @@
-from common.local import blacklist_words
+from share.local import LOCAL_URL
+from share.tools import get_url_str_set
 from pyrogram.enums.parse_mode import ParseMode
+
+
+blacklist_words = get_url_str_set(f'{LOCAL_URL}/blacklist-words.txt')
 
 
 def gen_output(output: str, limit: int = 2000):

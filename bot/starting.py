@@ -1,6 +1,6 @@
 import logging
 from eval.tools import docker_clean
-from handlers.register import register_handlers, add_jobs
+from handlers.register import add_jobs, register_handlers
 
 
 def starting():

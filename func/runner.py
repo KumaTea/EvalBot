@@ -4,10 +4,10 @@ import logging
 from common.data import *
 from func.tools import gen_result
 from pyrogram.types import Message
-from common.local import trusted_group
-from bot.session import msg_store, eval_bot
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from eval.docker import run_docker, container_exited, clean_container, read_output_files, clean_files
+from share.local import trusted_group
+from bot.session import eval_bot, msg_store
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from eval.docker import run_docker, clean_files, clean_container, container_exited, read_output_files
 
 
 async def read_and_finish(

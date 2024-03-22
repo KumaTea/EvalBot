@@ -1,11 +1,11 @@
 import logging
 from pyrogram import Client
 from bot.tools import gen_uuid
-from bot.auth import ensure_auth
+from share.auth import ensure_auth
 from pyrogram.types import Message
 from common.data import SHM, DOCKER_IMAGES
 from eval.lang.c import create_bash_script
-from func.lang.common import select_run_lang, command_lang
+from func.lang.common import command_lang, select_run_lang
 
 
 async def run_c(code: str, message: Message, edited: bool = False, inform_id: int = None) -> Message:
